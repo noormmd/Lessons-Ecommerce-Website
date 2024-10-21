@@ -13,10 +13,12 @@
 
   <body>
     <div id="app">
+      <!--
       <header>
-        <!-- To add header using vue.js-->
+        To add header using vue.js
         <h1 v-text="Coursework1Website"></h1>
       </header>
+    -->
     </div>
   </body>
   <main>
@@ -71,6 +73,7 @@ export default {
 </script>
 
 <style>
+/*Background and text styling*/
 #app {
   background-color: beige;
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -80,6 +83,7 @@ export default {
   color: #2c3e50;
   font-family: 'Fraunces';font-size: 22px;
   /**font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;*/
+ margin: -8px; /** To make website fit page */
 }
 
 p {
@@ -112,7 +116,25 @@ p {
   padding-left: 20px;
 }
 
+/*When hovering over lesson item, change background*/
+#Lesson1:hover{
+  background-image: url(../public/geography.jpg);
+  color: white;
+}
+
+#Lesson2:hover{
+  background-image: url(../public/english.jpg);
+  color: white;
+}
+
+#Lesson3:hover{
+  background-image: url(../public/maths.jpg);
+  color: white;
+}
+
+/*Search bar input form*/
   #searchBar {
+    color: black;
 border-radius: 30px;
 border: 1px solid;
 padding: 10px;
@@ -122,6 +144,7 @@ margin-left: 16%;
     justify-content: center;
 }
 
+/*Buttons styling*/
 #searchButton, .addToCartButton {
 border-radius: 30px;
 border: 1px solid;
@@ -162,6 +185,7 @@ padding: 10px;
   pointer-events: none;
 }
 
+/*Change style and background colour when hovering*/
 #searchButton:hover, .addToCartButton:hover {
   color: #fff;
   background-color: #1A1A1A;
@@ -174,32 +198,11 @@ padding: 10px;
   transform: translateY(0);
 }
 
+/*Cart icon*/
 #cart {
   margin-left: 70%;
   margin-top: 10px;
 }
-  /** 
-    border: solid 3px;
-    border-color: rgba(133, 133, 196, 0.435);
-    border-radius: 12px;
-    border-width: 2px;
-
-    max-width: fit-content;
-    max-height: fit-content;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    border-style: outset;
-
-    align-items: center;
-    align-content: center;
-*/
-
 
 /*Styling of add to cart button*/
 .addToCartButton {
