@@ -1,5 +1,5 @@
 <template>
-   <div id="app">
+  <div id="app">
 
     <header>
       <!-- Website name -->
@@ -9,17 +9,19 @@
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
     <link href='https://fonts.googleapis.com/css?family=Fraunces' rel='stylesheet'>
     <title>Coursework for Full Stack</title>
- 
-      <!--
+
+    <!--
       <header>
         To add header using vue.js
         <h1 v-text="Coursework1Website"></h1>
       </header>
     -->
-    </div>
-  
+  </div>
+
   <main>
-    <a id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"></a>
+    <!-- Cart -->
+    <a id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"> {{ NOfItemsInCart }} </a>
+
     <!-- Search functionality via to do list workshop-->
     <div id="SearchFunctionality">
       <h1>Lessons</h1>
@@ -30,19 +32,20 @@
       <div id="Lesson1">
         <h3>Geography</h3>
         <p>Information: </p>
-        <button class="addToCartButton">Add to cart</button>
+        <!--When clicked on, will add 1 lesson id to cart-->
+        <button class="addToCartButton" value="Add to the Cart" @click="addToCart">Add to cart</button>
       </div>
 
       <div id="Lesson2">
         <h3>English</h3>
         <p>Information: </p>
-        <button class="addToCartButton">Add to cart</button>
+        <button class="addToCartButton" value="Add to the Cart" @click="addToCart">Add to cart</button>
       </div>
 
       <div id="Lesson3">
         <h3>Maths</h3>
         <p>Information: </p>
-        <button class="addToCartButton" @:onclick="addItem">Add to cart</button>
+        <button class="addToCartButton" value="Add to the Cart" @click="addToCart">Add to cart</button>
       </div>
 
     </div>
@@ -54,7 +57,7 @@
 <script>
 //import { ref } from 'vue';
 
-    export default {
+export default {
   name: 'App',
   components: {
   },
@@ -69,19 +72,26 @@
       cart: []
     };
   },
-    
+/** 
   cart: {
     0: 1001,
     1: 1002,
     2: 1003,
     3: 1004
   },
+  **/
 
   methods: {
-    addItem: function () {
-      this.cart.push(this.product.id)
+    addToCart: function () {
+      this.cart.push(this.lessons.id);
 
-}
+    },
+
+    computed: {
+      NOfItemsInCart: function () {
+        return this.cart.length || "";
+      }
+    }
   }
 };
 
