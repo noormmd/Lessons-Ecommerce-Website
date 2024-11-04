@@ -3,7 +3,7 @@
 
     <header>
       <!-- Website name -->
-      <h1>{{ LessonsStore }}</h1>
+      <h1>{{ sitename }}</h1>
     </header>
 
     <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
@@ -44,7 +44,7 @@
 
       <div id="Lesson3">
         <h3>Maths</h3>
-        <p>Information: </p>
+        <p>Information: {{ lessons.description }}</p>
         <button class="addToCartButton" value="Add to the Cart" @click="addToCart">Add to cart</button>
       </div>
 
@@ -72,25 +72,24 @@ export default {
       cart: []
     };
   },
-/** 
-  cart: {
-    0: 1001,
-    1: 1002,
-    2: 1003,
-    3: 1004
-  },
-  **/
+  /** 
+    cart: {
+      0: 1001,
+      1: 1002,
+      2: 1003,
+      3: 1004
+    },
+    **/
 
   methods: {
-    addToCart: function () {
-      this.cart.push(this.lessons.id);
-
-    },
-
-    computed: {
-      NOfItemsInCart: function () {
-        return this.cart.length || "";
-      }
+    //define lessonId
+    addToCart(lessonId) {
+      this.cart.push(lessonId);
+    }
+  },
+  computed: {
+    NOfItemsInCart() {
+      return this.cart.length;
     }
   }
 };
