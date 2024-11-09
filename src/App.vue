@@ -36,7 +36,7 @@
     <div id="Lessons">
       <div id="lessonItems">
         <!-- Using v-for to loop through lessons array -->
-         <!-- For each lesson in the array create a new div using the id as the key -->
+        <!-- For each lesson in the array create a new div using the id as the key -->
         <div v-for="lesson in lessons" :key="lesson.id" class="lesson-item">
 
           <!-- Displaying lesson properties from lesson array -->
@@ -45,15 +45,17 @@
           <p>Price: £{{ lesson.price }} per hour</p>
           <p>Description: {{ lesson.description }}</p>
           <p>Availability: {{ lesson.availability }} spaces</p>
-
+          <!-- To display individual image from image property in lesson array -->
+          <img v-bind:src="lesson.image" alt="Lesson Image" class="lesson-image">
+          <br>
           <!-- Button to add to cart with Vue event handler, using id -->
-           <!-- When availability is less than or equal to 0 disable button -->
+          <!-- When availability is less than or equal to 0 disable button -->
           <button class="addToCartButton" @click="addToCart(lesson.id)" :disabled="lesson.availability <= 0">
-          <!--Using ternary operator (IF statement TRUE ? option 1 : ELSE option 2)-->
-          <!-- If lesson availability is greater than 0, then show "add to cart" for button, else show "no lessons available"-->
-           {{ lesson.availability > 0 ? "Add to Cart" : "No lessons available" }}
+            <!--Using ternary operator (IF statement TRUE ? option 1 : ELSE option 2)-->
+            <!-- If lesson availability is greater than 0, then show "add to cart" for button, else show "no lessons available"-->
+            {{ lesson.availability > 0 ? "Add to Cart" : "No lessons available" }}
           </button>
-          
+
         </div>
       </div>
     </div>
@@ -173,9 +175,9 @@ export default {
     return {
       sitename: "Lessons Website",
       lessons: [
-        { id: 1001, subject: "Geography", location: "Oxford", price: 100, description: "Lessons located at the highly esteemed educational institute", availability: "5" },
-        { id: 1002, subject: "English Language", location: "London", price: 100, description: "Lessons aimed at improving english language skills", availability: "5" },
-        { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5" },
+        { id: 1001, subject: "Geography", location: "Oxford", price: 100, description: "Lessons located at the highly esteemed educational institute", availability: "5", image: "../public/geography.jpg" },
+        { id: 1002, subject: "English Language", location: "London", price: 100, description: "Lessons aimed at improving english language skills", availability: "5", image: "../public/english.jpg" },
+        { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5", image: "../public/maths.jpg" },
         { id: 1004, subject: "History", location: "Edinburgh", price: 90, description: "In-depth lessons on historical events and analysis in Edinburgh", availability: "5" },
         { id: 1005, subject: "Physics", location: "Manchester", price: 110, description: "Focused lessons on physics concepts and experiments in Manchester", availability: "5" },
         { id: 1006, subject: "Biology", location: "Bristol", price: 95, description: "Lessons designed to improve understanding of biological systems at Bristol", availability: "5" },
@@ -290,6 +292,10 @@ p {
 /* Styling for each individual lesson / lesson div
 #lesson-item {
 
+}
+
+Styling of each individual image displayed in div
+#lesson-image {
 }
 */
 
