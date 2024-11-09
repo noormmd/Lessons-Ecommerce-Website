@@ -20,9 +20,10 @@
 
   <main>
     <!-- Cart -->
-    <a @click="toggleCart" id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"> {{ NOfItemsInCart }} </a>
+    <a @click="toggleCart" id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"> {{ NOfItemsInCart }}
+    </a>
     <!--Function to show cart-->
-<!--<div v-if="cart">-->
+    <!--<div v-if="cart">-->
 
     <!-- Search functionality via to do list workshop-->
     <div id="SearchFunctionality">
@@ -30,6 +31,9 @@
       <input type="text" id="searchBar">
       <button id="searchButton">Search lessons</button>
     </div>
+
+   
+
     <div id="Lessons">
       <div id="Lesson1">
         <h3>Geography</h3>
@@ -74,48 +78,48 @@ Show cart outside of main through cart if div
   </div>
 -->
 
-<h1>Welcome to Checkout</h1>
-<p><!--Binding name with v-model-->
-  Name:
-</p>
-<input type="text" v-model="order.name">
-<!--V-model- Gets sent to order.name, binding element with order.name-->
+  <h1>Welcome to Checkout</h1>
+  <p><!--Binding name with v-model-->
+    Name:
+  </p>
+  <input type="text" v-model="order.name">
+  <!--V-model- Gets sent to order.name, binding element with order.name-->
 
-<p>Surname:</p>
-<input type="text" v-model="order.surname">
+  <p>Surname:</p>
+  <input type="text" v-model="order.surname">
 
-<p>Email:</p>
-<input type="text" v-model="order.email">
+  <p>Email:</p>
+  <input type="text" v-model="order.email">
 
-<!--Select button using v-model-->
-<p>Select region</p>
-<select v-model="order.region">
-  <option disabled>Select Region</option>
-  <option v-bind:value="order.region">Europe</option>
-  <option v-bind:value="order.region">USA</option>
-  <option v-bind:value="order.region">Asia</option>
-  <option v-bind:value="order.region">Middle East</option>
-  <option v-bind:value="order.region">Africa</option>
-</select>
+  <!--Select button using v-model-->
+  <p>Select region</p>
+  <select v-model="order.region">
+    <option disabled>Select Region</option>
+    <option v-bind:value="order.region">Europe</option>
+    <option v-bind:value="order.region">USA</option>
+    <option v-bind:value="order.region">Asia</option>
+    <option v-bind:value="order.region">Middle East</option>
+    <option v-bind:value="order.region">Africa</option>
+  </select>
 
-<p>Zip/Postcode:</p>
-<input type="text" v-model="order.postcode">
+  <p>Zip/Postcode:</p>
+  <input type="text" v-model="order.postcode">
 
-<p>Address:</p>
-<input type="text" v-model="order.address">
-<!--Button for checking out-->
-<button v-on:click="submitCheckoutButton">Place Order</button>
+  <p>Address:</p>
+  <input type="text" v-model="order.address">
+  <!--Button for checking out-->
+  <button v-on:click="submitCheckoutButton">Place Order</button>
 
-<h2> Order Information </h2>
-<p>Name: {{ order.name }}</p>
-<p>Surname: {{ order.surname }}</p>
-<p>Email: {{ order.email }}</p>
-<p>Region: {{ order.region }}</p>
-<p>Zip/Postcode: {{ order.postcode }}</p>
-<p>Deliver to address: {{ order.address }}</p>
-{{ order.lesson }}
+  <h2> Order Information </h2>
+  <p>Name: {{ order.name }}</p>
+  <p>Surname: {{ order.surname }}</p>
+  <p>Email: {{ order.email }}</p>
+  <p>Region: {{ order.region }}</p>
+  <p>Zip/Postcode: {{ order.postcode }}</p>
+  <p>Deliver to address: {{ order.address }}</p>
+  {{ order.lesson }}
 
-<!--
+  <!--
 using v-for without key
 If you don't need key
 <ol>
@@ -123,7 +127,7 @@ If you don't need key
 </ol>
 -->
 
-<!-- Checkbox and Radio buttons for method.order
+  <!-- Checkbox and Radio buttons for method.order
 <p><input type="checkbox" id="gift" value="true" v-model="order.gift">
 <label for="gift">Ship As Gift?</label></p>
 
@@ -147,7 +151,14 @@ export default {
       lessons: [
         { id: 1001, subject: "Geography", location: "Oxford", price: 100, description: "Lessons located at the highly esteemed educational institute", availability: "5" },
         { id: 1002, subject: "English Language", location: "London", price: 100, description: "Lessons aimed at improving english language skills", availability: "5" },
-        { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5" }
+        { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5" },
+        { id: 1004, subject: "History", location: "Edinburgh", price: 90, description: "In-depth lessons on historical events and analysis in Edinburgh", availability: "5" },
+        { id: 1005, subject: "Physics", location: "Manchester", price: 110, description: "Focused lessons on physics concepts and experiments in Manchester", availability: "5" },
+        { id: 1006, subject: "Biology", location: "Bristol", price: 95, description: "Lessons designed to improve understanding of biological systems at Bristol", availability: "5" },
+        { id: 1007, subject: "Chemistry", location: "Leeds", price: 105, description: "Lessons focusing on chemical reactions and principles in Leeds", availability: "5" },
+        { id: 1008, subject: "Art", location: "Brighton", price: 80, description: "Creative art lessons to explore techniques and styles in Brighton", availability: "5" },
+        { id: 1009, subject: "Music", location: "Liverpool", price: 120, description: "Music lessons designed to enhance skills and theory in Liverpool", availability: "5" },
+        { id: 1010, subject: "Economics", location: "Birmingham", price: 110, description: "Lessons to improve economic understanding and application in Birmingham", availability: "5" }
       ],
       cart: [],
       lessonCategories: ['English', 'Maths', 'Science', 'Geography'],
@@ -180,7 +191,7 @@ export default {
     //function runs when checkout button is pressed
     //no parameters, call an alert that says congrats
     submitCheckoutButton() {
-alert("Purchase successful, thank you for shopping with us")
+      alert("Purchase successful, thank you for shopping with us")
     }
   },
   computed: {
