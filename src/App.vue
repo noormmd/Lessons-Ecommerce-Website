@@ -38,16 +38,22 @@
         <!-- Using v-for to loop through lessons array -->
          <!-- For each lesson in the array create a new div using the id as the key -->
         <div v-for="lesson in lessons" :key="lesson.id" class="lesson-item">
+
+          <!-- Displaying lesson properties from lesson array -->
           <h3>{{ lesson.subject }}</h3>
           <p>Location: {{ lesson.location }}</p>
           <p>Price: £{{ lesson.price }} per hour</p>
           <p>Description: {{ lesson.description }}</p>
           <p>Availability: {{ lesson.availability }} spaces</p>
-          <!-- Button to add to cart with @click event, sending id to cart -->
+
+          <!-- Button to add to cart with Vue event handler, using id -->
            <!-- When availability is less than or equal to 0 disable button -->
           <button class="addToCartButton" @click="addToCart(lesson.id)" :disabled="lesson.availability <= 0">
-            {{ lesson.availability > 0 ? "Add to Cart" : "No lessons available" }}
+          <!--Using ternary operator (IF statement TRUE ? option 1 : ELSE option 2)-->
+          <!-- If lesson availability is greater than 0, then show "add to cart" for button, else show "no lessons available"-->
+           {{ lesson.availability > 0 ? "Add to Cart" : "No lessons available" }}
           </button>
+          
         </div>
       </div>
     </div>
