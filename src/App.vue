@@ -145,9 +145,9 @@ export default {
     return {
       sitename: "Lessons Website",
       lessons: [
-        { id: 1001, title: "Geography", location: "Oxford", price: 100, description: "Geography lessons", availability: "5" },
-        { id: 1002, title: "English", location: "London", price: 100, description: "English lessons", availability: "5" },
-        { id: 1003, title: "Maths", location: "Cambridge", price: 100, description: "Math lessons", availability: "5" }
+        { id: 1001, subject: "Geography", location: "Oxford", price: 100, description: "Lessons located at the highly esteemed educational institute", availability: "5" },
+        { id: 1002, subject: "English Language", location: "London", price: 100, description: "Lessons aimed at improving english language skills", availability: "5" },
+        { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5" }
       ],
       cart: [],
       lessonCategories: ['English', 'Maths', 'Science', 'Geography'],
@@ -158,8 +158,8 @@ export default {
         region: "",
         postcode: "",
         address: "",
-      },
-      lesson1: {
+      }
+      /**lesson1: {
         id: 1, title: "Geography", location: "Oxford", price: 100, description: "Geography lessons", availability: "5"
       },
       lesson2: {
@@ -167,7 +167,7 @@ export default {
       },
       lesson3: {
         id: 3, title: "Maths", location: "Cambridge", price: 100, description: "Math lessons", availability: "5"
-      } 
+      } */
     };
   },
 
