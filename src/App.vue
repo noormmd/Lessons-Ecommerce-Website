@@ -12,7 +12,7 @@
 
     <!--
       <header>
-        To add header using vue.js
+        Header using vue.js
         <h1 v-text="Coursework1Website"></h1>
       </header>
     -->
@@ -20,7 +20,9 @@
 
   <main>
     <!-- Cart -->
-    <a id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"> {{ NOfItemsInCart }} </a>
+    <a @click="toggleCart" id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"> {{ NOfItemsInCart }} </a>
+    <!--Function to show cart-->
+<!--<div v-if="cart">-->
 
     <!-- Search functionality via to do list workshop-->
     <div id="SearchFunctionality">
@@ -34,6 +36,9 @@
         <p>Information: </p>
         <!--When clicked on, will add 1 lesson id to cart-->
         <button class="addToCartButton" value="Add to the Cart" @click="addToCart">Add to cart</button>
+        <!-- v-on:click - when button is clicked add to cart function is ran -->
+        <!-- v-show - when isAvailable is true the button will show, otherwise have added too many items to cart -->
+        <!-- v-show="isAvailable -->
       </div>
 
       <div id="Lesson2">
@@ -45,16 +50,91 @@
       <div id="Lesson3">
         <h3>Maths</h3>
         <p>Information: {{ lessons.description }}</p>
-        <button class="addToCartButton" value="Add to the Cart" @click="addToCart">Add to cart</button>
-      </div>
+        <button class="addToCartButton" value="Add to the Cart" v-if="isAvailable" @click="addToCart">Add to
+          cart</button>
+        <!-- IF ELSE CASE If you have added too many items, if else gets run
+         where button gets disabled and message shows -->
+        <div v-else>
+          <button disabled>
+            Disabled button
+          </button>
+          Selected the maximum number of available lessons
+        </div>
 
+      </div>
     </div>
+
   </main>
 
+  <!--
+</div>
+Show cart outside of main through cart if div 
+<div v-else>
 
+  </div>
+-->
+
+<h1>Welcome to Checkout</h1>
+<p><!--Binding name with v-model-->
+  Name:
+</p>
+<input type="text" v-model="order.name">
+<!--V-model- Gets sent to order.name, binding element with order.name-->
+
+<p>Surname:</p>
+<input type="text" v-model="order.surname">
+
+<p>Email:</p>
+<input type="text" v-model="order.email">
+
+<!--Select button using v-model-->
+<p>Select region</p>
+<select v-model="order.region">
+  <option disabled>Select Region</option>
+  <option v-bind:value="order.region">Europe</option>
+  <option v-bind:value="order.region">USA</option>
+  <option v-bind:value="order.region">Asia</option>
+  <option v-bind:value="order.region">Middle East</option>
+  <option v-bind:value="order.region">Africa</option>
+</select>
+
+<p>Zip/Postcode:</p>
+<input type="text" v-model="order.postcode">
+
+<p>Address:</p>
+<input type="text" v-model="order.address">
+<!--Button for checking out-->
+<button v-on:click="submitCheckoutButton">Place Order</button>
+
+<h2> Order Information </h2>
+<p>Name: {{ order.name }}</p>
+<p>Surname: {{ order.surname }}</p>
+<p>Email: {{ order.email }}</p>
+<p>Region: {{ order.region }}</p>
+<p>Zip/Postcode: {{ order.postcode }}</p>
+<p>Deliver to address: {{ order.address }}</p>
+{{ order.lesson }}
+
+<!--
+using v-for without key
+If you don't need key
+<ol>
+  <li v-for="lesson in lessonCategories">{{lesson}}</li>
+</ol>
+-->
+
+<!-- Checkbox and Radio buttons for method.order
+<p><input type="checkbox" id="gift" value="true" v-model="order.gift">
+<label for="gift">Ship As Gift?</label></p>
+
+Radio gives the choices, if above is seleted as true, like home or business address
+<p><input type="radio" id="home" value="Home" v-model="order.method"></p>
+Can select default options in order with 'home' for method and false properties for gift
+-->
 </template>
 
 <script>
+
 //import { ref } from 'vue';
 
 export default {
@@ -65,31 +145,56 @@ export default {
     return {
       sitename: "Lessons Website",
       lessons: [
-        { id: 1001, title: "Geography", location: "Oxford", price: 100, description: "Geography lessons" },
-        { id: 1002, title: "English", location: "London", price: 100, description: "English lessons" },
-        { id: 1003, title: "Maths", location: "Cambridge", price: 100, description: "Math lessons" }
+        { id: 1001, title: "Geography", location: "Oxford", price: 100, description: "Geography lessons", availability: "5" },
+        { id: 1002, title: "English", location: "London", price: 100, description: "English lessons", availability: "5" },
+        { id: 1003, title: "Maths", location: "Cambridge", price: 100, description: "Math lessons", availability: "5" }
       ],
-      cart: []
+      cart: [],
+      lessonCategories: ['English', 'Maths', 'Science', 'Geography'],
+      order: { // order details, by default setting it to empty string
+        name: "",
+        surname: "",
+        email: "",
+        region: "",
+        postcode: "",
+        address: "",
+      },
+      lesson1: {
+        id: 1, title: "Geography", location: "Oxford", price: 100, description: "Geography lessons", availability: "5"
+      },
+      lesson2: {
+        id: 2, title: "English", location: "London", price: 100, description: "English lessons", availability: "5"
+      },
+      lesson3: {
+        id: 3, title: "Maths", location: "Cambridge", price: 100, description: "Math lessons", availability: "5"
+      } 
     };
   },
-  /** 
-    cart: {
-      0: 1001,
-      1: 1002,
-      2: 1003,
-      3: 1004
-    },
-    **/
 
   methods: {
+    // function to push the lesson id of product into cart
     //define lessonId
     addToCart(lessonId) {
       this.cart.push(lessonId);
+    },
+    //function runs when checkout button is pressed
+    //no parameters, call an alert that says congrats
+    submitCheckoutButton() {
+alert("Purchase successful, thank you for shopping with us")
     }
   },
   computed: {
+    // function to show number of items in cart
+    // by returning cart length (number of product ids)
     NOfItemsInCart() {
       return this.cart.length;
+    },
+    //total elements available in inventory are more than elements added to cart 
+    isAvailable() {
+      // when total number of available elements have been added, button will be disabled
+      //for each item
+      return this.lessons.availability > this.NOfItemsInCart;
+      // if (this.cart.length) isEqual (this.lessons.availability)
     }
   }
 };
