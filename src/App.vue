@@ -32,7 +32,25 @@
       <button id="searchButton">Search lessons</button>
     </div>
 
-   
+    <!-- Displaying all lessons using v-for -->
+    <div id="Lessons">
+      <div id="lessonItems">
+        <!-- Using v-for to loop through lessons array -->
+         <!-- For each lesson in the array create a new div using the id as the key -->
+        <div v-for="lesson in lessons" :key="lesson.id" class="lesson-item">
+          <h3>{{ lesson.subject }}</h3>
+          <p>Location: {{ lesson.location }}</p>
+          <p>Price: £{{ lesson.price }} per hour</p>
+          <p>Description: {{ lesson.description }}</p>
+          <p>Availability: {{ lesson.availability }} spaces</p>
+          <!-- Button to add to cart with @click event, sending id to cart -->
+           <!-- When availability is less than or equal to 0 disable button -->
+          <button class="addToCartButton" @click="addToCart(lesson.id)" :disabled="lesson.availability <= 0">
+            {{ lesson.availability > 0 ? "Add to Cart" : "No lessons available" }}
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div id="Lessons">
       <div id="Lesson1">
@@ -262,6 +280,12 @@ p {
   align-items: center;
   border-color: darkgrey;
 }
+
+/* Styling for each individual lesson / lesson div
+#lesson-item {
+
+}
+*/
 
 /*Each individual div of the lesson items*/
 #Lesson1,
