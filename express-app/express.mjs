@@ -25,6 +25,22 @@ app.use(function (req, res, next) {
     // user on webpage message^
 });
 
+// Function for logging info of incoming requests
+const logger = (req, res, next) => {
+    const time = new Date().toISOString(); // Capture the exact timestamp of the request
+    const method = req.method; //  Type of request / HTTP method being used (eg GET, POST)
+    const url = req.url; // Which route is being accessed
+    
+  // Logs each incoming request to the console
+    console.log(`[${time}] ${method} request to ${url}`);
+    
+    // Move on to the next middleware or route handler
+    next();
+  };
+
+  // Can log all routes if necessary
+// app.use(logger);
+
 // to send back welcome message to user 
 // routing function called when / is called (main router of website)
 app.get("/", function (req, res) {
