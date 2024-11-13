@@ -23,3 +23,5 @@ pnpm-debug.log*
 *.sw?
 express.js
 conf/db.properties
+vue-app/package-lock.json
+vue-app/package.json

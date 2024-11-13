@@ -2,7 +2,7 @@
   <div id="app">
 
     <header>
-      <!-- Website name -->
+      <!-- Website name / Welcome message -->
       <h1>{{ sitename }}</h1>
     </header>
 
@@ -20,14 +20,13 @@
 
   <main>
     <!-- Cart -->
-    <a @click="toggleCart" id="cart"><img alt="Cart" id="carticon" src="../public/cart-icon.png"> {{ NOfItemsInCart }}
+    <a @click="toggleCart" id="cart"><img alt="Cart" id="carticon" src="../public/images/cart-icon.png"> {{ NOfItemsInCart }}
     </a>
     <!--Function to show cart-->
     <!--<div v-if="cart">-->
 
     <!-- Search functionality via to do list workshop-->
     <div id="SearchFunctionality">
-      <h1>Lessons</h1>
       <input type="text" id="searchBar">
       <button id="searchButton">Search lessons</button>
     </div>
@@ -43,9 +42,9 @@
           <h3>{{ lesson.subject }}</h3>
           <p>Location: {{ lesson.location }}</p>
           <p>Price: £{{ lesson.price }} per hour</p>
-          <p>Description: {{ lesson.description }}</p>
+          <p class="lessonDescription">{{ lesson.description }}</p>
           <p>Availability: {{ lesson.availability }} spaces</p>
-          <!-- To display individual image from image property in lesson array -->
+          <!-- To display individual image from image property using v-bind:src -->
           <img v-bind:src="lesson.image" alt="Lesson Image" class="lesson-image">
           <br>
           <!-- Button to add to cart with Vue event handler, using id -->
@@ -103,16 +102,20 @@ Show cart outside of main through cart if div
 
   </div>
 -->
-
+  
+<!-- Checkout/cart section which will be shown after cart is clicked -->
   <h1>Welcome to Checkout</h1>
   <p><!--Binding name with v-model-->
-    Name:
+    First name:
   </p>
-  <input type="text" v-model="order.name">
+  <input type="text" v-model="order.firstname">
   <!--V-model- Gets sent to order.name, binding element with order.name-->
 
   <p>Surname:</p>
   <input type="text" v-model="order.surname">
+
+  <p>Phone number:</p>
+  <input type="text" v-model="order.phonenumber">
 
   <p>Email:</p>
   <input type="text" v-model="order.email">
@@ -137,8 +140,9 @@ Show cart outside of main through cart if div
   <button v-on:click="submitCheckoutButton">Place Order</button>
 
   <h2> Order Information </h2>
-  <p>Name: {{ order.name }}</p>
+  <p>Name: {{ order.firstname }}</p>
   <p>Surname: {{ order.surname }}</p>
+  <p>Phone number: {{ order.phonenumber }}</p>
   <p>Email: {{ order.email }}</p>
   <p>Region: {{ order.region }}</p>
   <p>Zip/Postcode: {{ order.postcode }}</p>
@@ -164,47 +168,31 @@ Can select default options in order with 'home' for method and false properties 
 </template>
 
 <script>
-
+// Vue js instance
 //import { ref } from 'vue';
 
 export default {
   name: 'App',
   components: {
   },
+  // data properties
   data() {
     return {
-      sitename: "Lessons Website",
-      lessons: [
-        { id: 1001, subject: "Geography", location: "Oxford", price: 100, description: "Lessons located at the highly esteemed educational institute", availability: "5", image: "../public/geography.jpg" },
-        { id: 1002, subject: "English Language", location: "London", price: 100, description: "Lessons aimed at improving english language skills", availability: "5", image: "../public/english.jpg" },
-        { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5", image: "../public/maths.jpg" },
-        { id: 1004, subject: "History", location: "Edinburgh", price: 90, description: "In-depth lessons on historical events and analysis in Edinburgh", availability: "5" },
-        { id: 1005, subject: "Physics", location: "Manchester", price: 110, description: "Focused lessons on physics concepts and experiments in Manchester", availability: "5" },
-        { id: 1006, subject: "Biology", location: "Bristol", price: 95, description: "Lessons designed to improve understanding of biological systems at Bristol", availability: "5" },
-        { id: 1007, subject: "Chemistry", location: "Leeds", price: 105, description: "Lessons focusing on chemical reactions and principles in Leeds", availability: "5" },
-        { id: 1008, subject: "Art", location: "Brighton", price: 80, description: "Creative art lessons to explore techniques and styles in Brighton", availability: "5" },
-        { id: 1009, subject: "Music", location: "Liverpool", price: 120, description: "Music lessons designed to enhance skills and theory in Liverpool", availability: "5" },
-        { id: 1010, subject: "Economics", location: "Birmingham", price: 110, description: "Lessons to improve economic understanding and application in Birmingham", availability: "5" }
-      ],
+      sitename: "Extra Lessons Store",
+      lessons: [], // empty array of lessons
+      cartVisible: false,  // Control cart visibility, set to false by default
       cart: [],
       lessonCategories: ['English', 'Maths', 'Science', 'Geography'],
       order: { // order details, by default setting it to empty string
-        name: "",
+        firstname: "",
         surname: "",
+        phonenumber: "",
         email: "",
         region: "",
         postcode: "",
         address: "",
+        lessonid: ""
       }
-      /**lesson1: {
-        id: 1, title: "Geography", location: "Oxford", price: 100, description: "Geography lessons", availability: "5"
-      },
-      lesson2: {
-        id: 2, title: "English", location: "London", price: 100, description: "English lessons", availability: "5"
-      },
-      lesson3: {
-        id: 3, title: "Maths", location: "Cambridge", price: 100, description: "Math lessons", availability: "5"
-      } */
     };
   },
 
@@ -218,6 +206,9 @@ export default {
     //no parameters, call an alert that says congrats
     submitCheckoutButton() {
       alert("Purchase successful, thank you for shopping with us")
+    },
+    toggleCart() {
+      this.showCart = !this.showCart; // Toggle between cart page and lessons page
     }
   },
   computed: {
@@ -232,7 +223,24 @@ export default {
       //for each item
       return this.lessons.availability > this.NOfItemsInCart;
       // if (this.cart.length) isEqual (this.lessons.availability)
-    }
+    } //fetch for json
+  }, // fetch will call our server, 
+  created: function () {
+    const that = this; 
+    // fetch API call, retrieves response from back end to present to front end
+    fetch("http://localhost:3000/lessons").then(
+      function (response) //function will manage the response
+      { // will get the response and manage it by choosing what to do next
+        response.json().then( // when u have json next function will be executed
+          function (json) { // function to maabeg the son
+            //alert(json);
+            // Will assign to products the json we will load from our server
+            that.lessons = json; // products equal to the json we will recieve
+          }
+        )
+      }
+    );
+
   }
 };
 
@@ -259,6 +267,18 @@ export default {
 </script>
 
 <style>
+
+.lessonDescription {
+font-family: 'Times New Roman', Times, serif;
+font-size: 20x;
+}
+
+/*Lesson header*/
+h1 {
+padding: 20px;
+margin-bottom: -20px;
+}
+
 /*Background and text styling*/
 #app {
   background-color: beige;
@@ -270,7 +290,6 @@ export default {
   font-family: 'Fraunces';
   font-size: 22px;
   /**font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;*/
-  margin: -8px;
   /** To make website fit page */
 }
 
@@ -289,15 +308,20 @@ p {
   border-color: darkgrey;
 }
 
+
+
 /* Styling for each individual lesson / lesson div
 #lesson-item {
 
 }
-
-Styling of each individual image displayed in div
-#lesson-image {
-}
 */
+
+/* Styling of each individual image displayed in div */
+.lesson-image {
+  height: 50px;
+  width: 50px;
+  padding-bottom: 15px;
+}
 
 /*Each individual div of the lesson items*/
 #Lesson1,
@@ -318,17 +342,18 @@ Styling of each individual image displayed in div
 
 /*When hovering over lesson item, change background*/
 #Lesson1:hover {
-  background-image: url(../public/geography.jpg);
+  background-image: url(../public/images/geography.jpg);
+  
   color: white;
 }
 
 #Lesson2:hover {
-  background-image: url(../public/english.jpg);
+  background-image: url(../public/images/english.jpg);
   color: white;
 }
 
 #Lesson3:hover {
-  background-image: url(../public/maths.jpg);
+  background-image: url(../public/images/maths.jpg);
   color: white;
 }
 
