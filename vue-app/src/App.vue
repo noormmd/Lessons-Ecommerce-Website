@@ -20,7 +20,7 @@
 
   <main>
     <!-- Cart -->
-    <a @click="toggleCart" id="cart"><img alt="Cart" id="carticon" src="../public/images/cart-icon.png"> {{ NOfItemsInCart }}
+    <a @click="toggleCart" id="cart" disabled><img alt="Cart" id="carticon" src="../public/images/cart-icon.png"> {{ NOfItemsInCart }}
     </a>
     <!--Function to show cart-->
     <!--<div v-if="cart">-->
@@ -97,7 +97,7 @@
 
   <!--
 </div>
-Show cart outside of main through cart if div 
+Show cart outside of main page through cart div using if function (potential idea)
 <div v-else>
 
   </div>
