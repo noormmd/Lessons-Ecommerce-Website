@@ -66,9 +66,7 @@ console.log(Lessons, Orders);
 //MIDDLEWARE
 
 // FUNCTION FOR STATIC IMAGES
-// A static file middleware that returns lesson images, or an error message
-//if the image file does not exist; the student needs to be able to test and
-//demonstrate these aspects (4%).
+
 // Serve static files from the public directory
 app.use('/public', express.static('public'));
 
