@@ -280,12 +280,18 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: "Internal Server Error" });
 });
 
+/**
 // MW to start server on a port
 app.listen(3000, function () {
     console.log("App started on port 3000");
+});*/
+
+// Allows AWS App Environment to choose a port, works both locally and on AWS
+const port = process.env.PORT || 3000;
+// Connect to port chosen by AWS
+app.listen(port, function() {
+ console.log("App started on port: " + port);
 });
-
-
 
 
 
