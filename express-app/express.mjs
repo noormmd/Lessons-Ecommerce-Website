@@ -69,8 +69,10 @@ console.log(Lessons, Orders);
 
 // Express static path, how it serves images
 // To serve static files from the public directory
+
 // Changing path relative to the root of the repository and public folder
-app.use('/lessons-website/images', express.static(path.join(__dirname, 'public', 'images')));
+// This serves images from the public/images folder at /images path
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
 // Middleware for serving static lesson images or returning an error message
 app.use('/images/:imageName', (req, res) => {
