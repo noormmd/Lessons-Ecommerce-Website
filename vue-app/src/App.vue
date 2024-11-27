@@ -20,7 +20,8 @@
 
   <main>
     <!-- Cart -->
-    <a @click="toggleCart" id="cart" disabled><img alt="Cart" id="carticon" src="../public/images/cart-icon.png"> {{ NOfItemsInCart }}
+    <a @click="toggleCart" id="cart" disabled><img alt="Cart" id="carticon" src="../public/images/cart-icon.png"> {{
+      NOfItemsInCart }}
     </a>
     <!--Function to show cart-->
     <!--<div v-if="cart">-->
@@ -102,8 +103,8 @@ Show cart outside of main page through cart div using if function (potential ide
 
   </div>
 -->
-  
-<!-- Checkout/cart section which will be shown after cart is clicked -->
+
+  <!-- Checkout/cart section which will be shown after cart is clicked -->
   <h1>Welcome to Checkout</h1>
   <p><!--Binding name with v-model-->
     First name:
@@ -226,7 +227,8 @@ export default {
     } //fetch for json
   }, // fetch will call our server, 
   created: function () {
-    const that = this; 
+    const that = this;
+    /**
     // fetch API call, retrieves response from back end to present to front end
     fetch("http://localhost:3000/lessons").then(
       function (response) //function will manage the response
@@ -239,7 +241,21 @@ export default {
           }
         )
       }
-    );
+    ),
+      function () {*/
+          // Fetch API call, retrieves response from Render to present to front end
+        fetch("https://lessons-ecommerce-website-rest-api3.onrender.com/lessons").then(
+          function (response) {
+            response.json().then(
+              function (json) {
+                //alert(json); To show data as an alert
+                //console.log(json); To show data in the console
+                that.lessons = json;
+              }
+            )
+          }
+        )
+      /**}*/
 
   }
 };
@@ -267,16 +283,15 @@ export default {
 </script>
 
 <style>
-
 .lessonDescription {
-font-family: 'Times New Roman', Times, serif;
-font-size: 20x;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 20x;
 }
 
 /*Lesson header*/
 h1 {
-padding: 20px;
-margin-bottom: -20px;
+  padding: 20px;
+  margin-bottom: -20px;
 }
 
 /*Background and text styling*/
@@ -343,7 +358,7 @@ p {
 /*When hovering over lesson item, change background*/
 #Lesson1:hover {
   background-image: url(../public/images/geography.jpg);
-  
+
   color: white;
 }
 
