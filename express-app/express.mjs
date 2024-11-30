@@ -71,7 +71,7 @@ console.log(Lessons, Orders);
 // To serve static files from the public directory
 
 // Changing path relative to the root of the repository and public folder
-// This serves images from the public/images folder at /images path
+// Serves images from the public/images folder at /images path
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
 // Middleware for serving static lesson images or returning an error message
@@ -156,6 +156,7 @@ app.get("/orders", async (req, res, next) => {
   });
 
 // POST HTTP METHOD
+/**
 // Add a new order
 app.post("/orders", async (req, res, next) => {
     try {
@@ -169,9 +170,36 @@ app.post("/orders", async (req, res, next) => {
 } catch (err) {
   next(err);
 }
+});*/
+
+const phoneRegex = /^[0-9]{10}$/;  // Phone number should be 10 digits
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;  // Email format
+
+// POST HTTP METHOD Create an order
+app.post("/orders", async (req, res) => {
+    const { firstname, surname, phonenumber, email, address, lessons } = req.body;
+
+    if (!firstname || !surname || !phonenumber || !email || !address || !lessons) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
+    if (!phoneRegex.test(phonenumber)) {
+        return res.status(400).json({ message: 'Invalid phone number' });
+    }
+
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    const newOrder = { firstname, surname, phonenumber, email, address, lessons };
+    const result = await ordersCollection.insertOne(newOrder);
+    res.status(201).json({ message: "Order created", id: result.insertedId });
 });
   
 
+
+
+// PUT HTTP METHOD Update lesson spaces
 app.put("/lessons/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
