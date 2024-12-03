@@ -45,7 +45,10 @@ const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
 await client.db("admin").command({ ping: 1 });
 console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
+await client.connect();
 const db = client.db("CST3340");
+const lessonsCollection = db.collection("Lessons");
+const ordersCollection = db.collection("Orders");
 
 // Initialise query (empty for fetching all documents)
 const query = {};
@@ -56,9 +59,6 @@ const [Lessons, Orders] = await Promise.all([
     client.db("CST3340").collection("Lessons").find(query).toArray(),
     client.db("CST3340").collection("Orders").find(query).toArray()
 ]);
-
-const lessonsCollection = db.collection("Lessons");
-const ordersCollection = db.collection("Orders");
 
 // Return the results
 console.log(Lessons, Orders);
@@ -175,7 +175,6 @@ app.post("/orders", async (req, res, next) => {
 
 // Search attempt
 async function searchSubjects() {    
-    await client.connect();
     let searchDocument = {
       "subject" : "/"+searchItem+"/"
     }
@@ -214,9 +213,6 @@ app.post("/orders", async (req, res) => {
 // POST Route to Save a New Order
 app.post('/orders', async (req, res) => {
     try {
-      // Connect to the MongoDB client
-      await client.connect();
-      const db = client.db(dbName);
       const ordersCollection = db.collection('orders'); // 'orders' collection
   
       const { firstname, surname, phonenumber, email, region, postcode, address, lessonIDs } = req.body;
@@ -246,20 +242,12 @@ app.post('/orders', async (req, res) => {
     } catch (error) {
       console.error(error);
       res.status(500).send({ error: 'Failed to create order' });
-    } finally {
-      // Ensure client connection is closed
-      await client.close();
-    }
+    } 
   });
 
   // PUT Route to Update Lesson Availability
   app.put('/lessons/:id', async (req, res) => {
     try {
-      // Connect to the MongoDB client
-      await client.connect();
-      const db = client.db(dbName);
-      const lessonsCollection = db.collection('lessons'); // 'lessons' collection
-  
       const { id } = req.params; // Get lesson ID from URL parameter
       const { availability } = req.body; // New availability value from request body
   
@@ -282,10 +270,7 @@ app.post('/orders', async (req, res) => {
     } catch (error) {
       console.error(error);
       res.status(500).send({ error: 'Failed to update lesson availability' });
-    } finally {
-      // Ensure client connection is closed
-      await client.close();
-    }
+    } 
   });
 
   
