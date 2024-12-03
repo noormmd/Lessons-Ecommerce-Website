@@ -172,9 +172,23 @@ app.post("/orders", async (req, res, next) => {
 }
 });*/
 
+
+// Search attempt
+async function searchSubjects() {    
+    await client.connect();
+    let searchDocument = {
+      "subject" : "/"+searchItem+"/"
+    }
+     // Insert a single document, wait for promise so we can read it back
+     const promise = await lessonsCollection.insertOne(searchDocument);
+     return promise;
+}
+
+
 const phoneRegex = /^[0-9]{10}$/;  // Phone number should be 10 digits
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;  // Email format
 
+/**
 // POST HTTP METHOD Create an order
 app.post("/orders", async (req, res) => {
     const { firstname, surname, phonenumber, email, address, lessons } = req.body;
@@ -195,10 +209,87 @@ app.post("/orders", async (req, res) => {
     const result = await ordersCollection.insertOne(newOrder);
     res.status(201).json({ message: "Order created", id: result.insertedId });
 });
+*/  
+
+// POST Route to Save a New Order
+app.post('/orders', async (req, res) => {
+    try {
+      // Connect to the MongoDB client
+      await client.connect();
+      const db = client.db(dbName);
+      const ordersCollection = db.collection('orders'); // 'orders' collection
   
+      const { firstname, surname, phonenumber, email, region, postcode, address, lessonIDs } = req.body;
+  
+      // Basic validation to ensure all inputs have values
+      if (!firstname || !surname || !phonenumber || !email || !lessonIDs || lessonIDs.length === 0) {
+        return res.status(400).send({ error: 'Missing required fields or invalid data.' });
+      }
+  
+      // Create an order object
+      const newOrder = {
+        firstname,
+        surname,
+        phonenumber,
+        email,
+        region,
+        postcode,
+        address,
+        lessonIDs,
+        orderDate: new Date() // To add a timestamp
+      };
+  
+      // Insert the order into the collection
+      const result = await ordersCollection.insertOne(newOrder);
+  
+      res.status(201).send({ message: 'Order created successfully', orderId: result.insertedId });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Failed to create order' });
+    } finally {
+      // Ensure client connection is closed
+      await client.close();
+    }
+  });
 
+  // PUT Route to Update Lesson Availability
+  app.put('/lessons/:id', async (req, res) => {
+    try {
+      // Connect to the MongoDB client
+      await client.connect();
+      const db = client.db(dbName);
+      const lessonsCollection = db.collection('lessons'); // 'lessons' collection
+  
+      const { id } = req.params; // Get lesson ID from URL parameter
+      const { availability } = req.body; // New availability value from request body
+  
+      // Basic validation
+      if (!availability || typeof availability !== 'number' || availability < 0) {
+        return res.status(400).send({ error: 'Invalid availability value' });
+      }
+  
+      // Update the lesson availability
+      const result = await lessonsCollection.updateOne(
+        { _id: new ObjectId(id) }, // Match lesson by its unique ObjectId
+        { $set: { availability } } // Update the 'availability' field
+      );
+  
+      if (result.matchedCount === 0) {
+        return res.status(404).send({ error: 'Lesson not found' });
+      }
+  
+      res.status(200).send({ message: 'Lesson availability updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Failed to update lesson availability' });
+    } finally {
+      // Ensure client connection is closed
+      await client.close();
+    }
+  });
 
-
+  
+/**
 // PUT HTTP METHOD Update lesson spaces
 app.put("/lessons/:id", async (req, res, next) => {
     try {
@@ -219,6 +310,7 @@ app.put("/lessons/:id", async (req, res, next) => {
         next(err);
     }
 });
+*/
 
 
   /**
