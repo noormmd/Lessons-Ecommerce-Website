@@ -210,40 +210,51 @@ app.post("/orders", async (req, res) => {
 });
 */  
 
-// POST Route to Save a New Order
 app.post('/orders', async (req, res) => {
     try {
-      const ordersCollection = db.collection('orders'); // 'orders' collection
-  
-      const { firstname, surname, phonenumber, email, region, postcode, address, lessonIDs } = req.body;
-  
-      // Basic validation to ensure all inputs have values
-      if (!firstname || !surname || !phonenumber || !email || !lessonIDs || lessonIDs.length === 0) {
-        return res.status(400).send({ error: 'Missing required fields or invalid data.' });
-      }
-  
-      // Create an order object
-      const newOrder = {
-        firstname,
-        surname,
-        phonenumber,
-        email,
-        region,
-        postcode,
-        address,
-        lessonIDs,
-        orderDate: new Date() // To add a timestamp
-      };
-  
-      // Insert the order into the collection
-      const result = await ordersCollection.insertOne(newOrder);
-  
-      res.status(201).send({ message: 'Order created successfully', orderId: result.insertedId });
+        // Extract the required fields from the request body
+        const { firstname, surname, phonenumber, email, postcode, address, lessonIDs } = req.body;
+
+        // Validate required fields
+        if (!firstname || !surname || !phonenumber || !email || !lessonIDs || lessonIDs.length === 0) {
+            return res.status(400).json({ error: 'Missing required fields or invalid data.' });
+        }
+
+        // Validate the phone number format
+        const phoneRegex = /^[0-9]{10}$/; // Adjust regex for your specific requirements
+        if (!phoneRegex.test(phonenumber)) {
+            return res.status(400).json({ error: 'Invalid phone number format.' });
+        }
+
+        // Validate the email format
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Invalid email format.' });
+        }
+
+        // Construct the new order object
+        const newOrder = {
+            firstname,
+            surname,
+            phonenumber,
+            email,
+            postcode,
+            address,
+            lessonIDs,
+            orderDate: new Date(), // Add a timestamp for the order
+        };
+
+        // Insert the new order into the collection
+        const result = await ordersCollection.insertOne(newOrder);
+
+        // Respond with success and the new order ID
+        res.status(201).json({ message: 'Order created successfully', orderId: result.insertedId });
     } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: 'Failed to create order' });
-    } 
-  });
+        console.error('Error creating order:', error);
+        res.status(500).json({ error: 'Failed to create order' });
+    }
+});
+
 
   // PUT Route to Update Lesson Availability
   app.put('/lessons/:id', async (req, res) => {
