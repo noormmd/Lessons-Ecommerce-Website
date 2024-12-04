@@ -210,51 +210,145 @@ app.post("/orders", async (req, res) => {
 });
 */  
 
+
+// Connect to MongoDB
+async function connectToDB() {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    try {
+      await client.connect();
+      console.log('Connected to MongoDB');
+      return client.db('CST3340');  // Specify your database name
+    } catch (error) {
+      console.error('Error connecting to MongoDB:', error);
+      process.exit(1);
+    }
+  }
+  
+  // POST route to handle order submission
+  app.post('/orders', async (req, res) => {
+    const db = await connectToDB();
+    const ordersCollection = db.collection('orders'); // Specify your orders collection
+  
+    const order = req.body;
+  
+    try {
+      // Insert order into MongoDB
+      const result = await ordersCollection.insertOne(order);
+      console.log('Order inserted:', result.insertedId);
+  
+      // Send success response
+      res.status(201).json({ message: 'Order placed successfully', orderId: result.insertedId });
+    } catch (error) {
+      console.error('Error inserting order:', error);
+      res.status(500).json({ message: 'Error placing order' });
+    }
+  });
+  
+
+/** 
+//newest
+// POST Route to Save a New Order
 app.post('/orders', async (req, res) => {
     try {
-        // Extract the required fields from the request body
-        const { firstname, surname, phonenumber, email, postcode, address, lessonIDs } = req.body;
-
-        // Validate required fields
-        if (!firstname || !surname || !phonenumber || !email || !lessonIDs || lessonIDs.length === 0) {
-            return res.status(400).json({ error: 'Missing required fields or invalid data.' });
-        }
-
-        // Validate the phone number format
-        const phoneRegex = /^[0-9]{10}$/; // Adjust regex for your specific requirements
-        if (!phoneRegex.test(phonenumber)) {
-            return res.status(400).json({ error: 'Invalid phone number format.' });
-        }
-
-        // Validate the email format
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ error: 'Invalid email format.' });
-        }
-
-        // Construct the new order object
-        const newOrder = {
-            firstname,
-            surname,
-            phonenumber,
-            email,
-            postcode,
-            address,
-            lessonIDs,
-            orderDate: new Date(), // Add a timestamp for the order
-        };
-
-        // Insert the new order into the collection
-        const result = await ordersCollection.insertOne(newOrder);
-
-        // Respond with success and the new order ID
-        res.status(201).json({ message: 'Order created successfully', orderId: result.insertedId });
+      const { firstname, surname, phonenumber, email, postcode, address, lessonIDs } = req.body;
+  
+      // Basic validation for required fields
+      if (!firstname || !surname || !phonenumber || !email || !lessonIDs || lessonIDs.length === 0) {
+        return res.status(400).send({ error: 'Missing required fields or invalid data.' });
+      }
+  
+      // Log the incoming request body to debug issues
+      console.log("Received order data:", req.body);
+  
+      // Validate phone number and email format
+      const phoneRegex = /^[0-9]{10}$/; // Adjust if phone numbers require different formats
+      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  
+      if (!phoneRegex.test(phonenumber)) {
+        return res.status(400).send({ error: 'Invalid phone number format' });
+      }
+  
+      if (!emailRegex.test(email)) {
+        return res.status(400).send({ error: 'Invalid email format' });
+      }
+  
+      // Create an order object
+      const newOrder = {
+        firstname,
+        surname,
+        phonenumber,
+        email,
+        postcode,
+        address,
+        lessonIDs,
+        orderDate: new Date(), // Timestamp for order creation
+      };
+  
+      // Insert the order into the "orders" collection
+      const result = await ordersCollection.insertOne(newOrder);
+  
+      // Log the result of the insert operation
+      console.log("Order inserted successfully:", result);
+  
+      res.status(201).send({ message: 'Order created successfully', orderId: result.insertedId });
     } catch (error) {
-        console.error('Error creating order:', error);
-        res.status(500).json({ error: 'Failed to create order' });
+      console.error("Error inserting order:", error);
+      res.status(500).send({ error: 'Failed to create order' });
     }
-});
+  });
+  
+  // GET Route to Fetch All Orders
+  app.get('/orders', async (req, res) => {
+    try {
+      // Fetch all orders from the collection
+      const orders = await ordersCollection.find({}).toArray();
+  
+      // Log the fetched data to debug issues
+      console.log("Fetched orders from database:", orders);
+  
+      res.status(200).json(orders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      res.status(500).send({ error: 'Failed to fetch orders' });
+    }
+  });
+  
 
+//last
+/**
+// POST Route to Save a New Order
+app.post('/orders', async (req, res) => {
+    try {
+      const ordersCollection = db.collection('orders'); // 'orders' collection
+  
+      const { firstname, surname, phonenumber, email, postcode, address, lessonIDs } = req.body;
+  
+      // Basic validation to ensure all inputs have values
+      if (!firstname || !surname || !phonenumber || !email || !lessonIDs || lessonIDs.length === 0) {
+        return res.status(400).send({ error: 'Missing required fields or invalid data.' });
+      }
+  
+      // Create an order object
+      const newOrder = {
+        firstname,
+        surname,
+        phonenumber,
+        email,
+        postcode,
+        address,
+        lessonIDs,
+        orderDate: new Date() // To add a timestamp
+      };
+  
+      // Insert the order into the collection
+      const result = await ordersCollection.insertOne(newOrder);
+  
+      res.status(201).send({ message: 'Order created successfully', orderId: result.insertedId });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Failed to create order' });
+    } 
+  });
 
   // PUT Route to Update Lesson Availability
   app.put('/lessons/:id', async (req, res) => {
@@ -283,7 +377,7 @@ app.post('/orders', async (req, res) => {
       res.status(500).send({ error: 'Failed to update lesson availability' });
     } 
   });
-
+*/
   
 /**
 // PUT HTTP METHOD Update lesson spaces
@@ -405,9 +499,9 @@ app.listen(3000, function () {
     console.log("App started on port 3000");
 });*/
 
-// Allows AWS App Environment to choose a port, works both locally and on AWS
+// Allows Render Environment to choose a port, works both locally and on AWS
 const port = process.env.PORT || 3000;
-// Connect to port chosen by AWS
+// Connect to port chosen by Render
 app.listen(port, function() {
  console.log("App started on port: " + port);
 });
