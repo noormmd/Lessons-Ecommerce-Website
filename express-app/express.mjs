@@ -5,23 +5,23 @@ import cors from 'cors';
 import path from 'path'; // Path module for handling and transforming file paths
 
 import fs from 'fs'; // Import filesystem module to check file existence
-// Import the `fs` (File System) module to check if a file exists
 
 // Instantiated app and middleware
 // Instantiate app by calling express
 const app = express();
 // MW supported by express - express handling json data so we dont have to convert it
 app.use(express.json());
-// Middleware using cors, enables us to get requests from any origin / route
-app.use(cors({ origin: '*' })); // allow from all origins
+// Middleware using cors, enables us to get requests from all origins / routes
+app.use(cors({ origin: '*' }));
 // Increases readability of json sent back in REST service
-app.set('json spaces', 3); // Defines how many spaces there will be betw diff elements and subelements of json
+app.set('json spaces', 3); // Defines how many spaces there will be betw subelements of json
 
+// To define correct path
 import { fileURLToPath } from 'url';
-
 // Get the current file path and directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 /**
 let propertiesPath = path.resolve(__dirname, "conf/db.properties");
 let properties = propertiesReader(propertiesPath);
@@ -94,11 +94,9 @@ app.use('/images/:imageName', (req, res) => {
     });
 });
 
-
-// LOGGER MIDDLEWARE
 // Define initial routing MW functions
 
-// Will log all requests
+// LOGGER MIDDLEWARE - Will log all requests
 app.use(function (req, res, next) {
     // Capture the exact timestamp of the request
     // Converts date object into string via JavaScript function
@@ -110,31 +108,26 @@ app.use(function (req, res, next) {
     next();
 });
 
-// To send welcome message
-// routing function called when / is called (main router of website)
+// To send welcome message, function called when / is called (main router of website)
 app.get("/", function (req, res) {
     res.send("Welcome to webpage, define your route i.e. /lessons or /orders");
 });
 
-
 // params to simplify data retrieval from collection
 app.param('lessons', function (req, res, next, Lessons) {
-    //initialises req.collection with lessons from collection mentioned
+    // initialises req.collection with lessons from collection mentioned
     req.collection = db.collection(Lessons);
     return next();
 });
 
-
 // params to simplify data retrieval from collection
 app.param('orders', function (req, res, next, Orders) {
-    //initialises req.collection with lessons from collection mentioned
+    // initialises req.collection with lessons from collection mentioned
     req.collection = db.collection(Orders);
     return next();
 });
 
-// GET HTTP REQUESTS
-// MW to send back products
-// Fetch all lessons
+// GET HTTP REQUESTS - MW to send back lessons
 app.get("/lessons", async (req, res, next) => {
     try {
       const lessons = await lessonsCollection.find({}).toArray();
@@ -143,7 +136,6 @@ app.get("/lessons", async (req, res, next) => {
       next(err);
     }
   });
-
 
 // Fetch all orders
 app.get("/orders", async (req, res, next) => {
@@ -154,6 +146,30 @@ app.get("/orders", async (req, res, next) => {
       next(err);
     }
   });
+
+
+  // Test route to post data to MongoDB
+app.post('/test', async (req, res) => {
+  try {
+      const { testData } = req.body; // Get testData from the request body
+
+      if (!testData) {
+          return res.status(400).json({ error: 'testData field is required' });
+      }
+
+      // Insert the test data into a test collection
+      const ordersCollection = db.collection('Orders');
+      const result = await ordersCollection.insertOne({ testData });
+
+      console.log('Test data inserted with ID:', result.insertedId);
+
+      res.status(201).json({ message: 'Data successfully inserted', id: result.insertedId });
+  } catch (error) {
+      console.error('Error inserting test data:', error);
+      res.status(500).json({ error: 'Failed to insert test data' });
+  }
+});
+
 
 // POST HTTP METHOD
 /**
@@ -171,18 +187,6 @@ app.post("/orders", async (req, res, next) => {
   next(err);
 }
 });*/
-
-
-// Search attempt
-async function searchSubjects() {    
-    let searchDocument = {
-      "subject" : "/"+searchItem+"/"
-    }
-     // Insert a single document, wait for promise so we can read it back
-     const promise = await lessonsCollection.insertOne(searchDocument);
-     return promise;
-}
-
 
 const phoneRegex = /^[0-9]{10}$/;  // Phone number should be 10 digits
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;  // Email format
@@ -217,7 +221,7 @@ async function connectToDB() {
     try {
       await client.connect();
       console.log('Connected to MongoDB');
-      return client.db('CST3340');  // Specify your database name
+      return client.db('CST3340');  
     } catch (error) {
       console.error('Error connecting to MongoDB:', error);
       process.exit(1);
@@ -227,7 +231,7 @@ async function connectToDB() {
   // POST route to handle order submission
   app.post('/orders', async (req, res) => {
     const db = await connectToDB();
-    const ordersCollection = db.collection('orders'); // Specify your orders collection
+    const ordersCollection = db.collection('Orders'); // Specify your orders collection
   
     const order = req.body;
   
@@ -403,84 +407,6 @@ app.put("/lessons/:id", async (req, res, next) => {
 */
 
 
-  /**
-// GET HTTP REQUESTS
-// MW to send back products
-app.get('/:lessons', function (req, res, next) {
-    res.json(Lessons);
-
-    /** 
-     * ignore this section
-    // read with find and then turn it into an array
-    req.collection.find({}).toArray(function (err, results) {
-        if (err) {
-            return next(err);
-        }
-        // send results in json format
-        res.send(Lessons);
-    });
-
-});
-
-
-// MW to send back order details
-app.get('/collection/:orders', function (req, res, next) {
-    // read with find and then turn it into an array
-
-    res.send(Orders);
-});
-
-// sorting / filtering through rest services
-app.get('/n/sortedLessons', function (req, res, next) {
-    Lessons.find({}, { limit: 2, sort: [["price", -1]] }).toArray(function
-        (err, results) {
-        if (err) {
-            return next(err);
-        }
-        res.send(results);
-    });
-});
-
-*/
-
-
-// defined a variable with our json
-// pass products to the json
-/** 
-let lessons = [
-    { id: 1001, subject: "Geography", location: "Oxford", price: 100, description: "Lessons located at the highly esteemed educational institute", availability: "5", image: "/images/geography.png" },
-    { id: 1002, subject: "English Language", location: "London", price: 100, description: "Lessons aimed at improving english language skills", availability: "5", image: "/images/english.png" },
-    { id: 1003, subject: "Maths", location: "Cambridge", price: 100, description: "Working on developing mathematical ability at Cambridge", availability: "5", image: "/images/maths.png" },
-    { id: 1004, subject: "History", location: "Edinburgh", price: 90, description: "In-depth lessons on historical events", availability: "5", image: "/images/history.png" },
-    { id: 1005, subject: "Physics", location: "Manchester", price: 110, description: "Focused lessons on physics concepts and experiments", availability: "5", image: "/images/physics.png" },
-    { id: 1006, subject: "Biology", location: "Bristol", price: 95, description: "Lessons designed to improve understanding of biological systems", availability: "5", image: "/images/biology.png" },
-    { id: 1007, subject: "Chemistry", location: "Leeds", price: 105, description: "Lessons focusing on chemical reactions and principles", availability: "5", image: "/images/chemistry.png" },
-    { id: 1008, subject: "Art", location: "Brighton", price: 80, description: "Creative art lessons to explore techniques and art styles", availability: "5", image: "/images/art.png" },
-    { id: 1009, subject: "Music", location: "Liverpool", price: 120, description: "Music lessons designed to enhance skills and theory", availability: "5", image: "/images/music.png" },
-    { id: 1010, subject: "Economics", location: "Birmingham", price: 110, description: "Lessons to improve economic understanding and application in Birmingham", availability: "5", image: "/images/economics.png" }
-];
-//send back json with products variable
-res.json(lessons);
-//res.send("The service has been called correctly and is working");
-});
-
-
-
-app.post("/lessons", function (req, res) {
-    //send a message as the response
-    res.send("The service has been called correctly and is working");
-});
-
-app.put("/lessons", function (req, res) {
-    res.send("The service has been called correctly and is working");
-});
-
-app.delete("/lessons", function (req, res) {
-    res.send("The service has been called correctly and is working");
-});
-
-*/
-
 // MW to manage incorrectly typed / unknown routes (fallback)
 app.use("/", function (req, res) {
     // Send back error status code and message as res
@@ -493,54 +419,9 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: "Internal Server Error" });
 });
 
-/**
-// MW to start server on a port
-app.listen(3000, function () {
-    console.log("App started on port 3000");
-});*/
-
 // Allows Render Environment to choose a port, works both locally and on AWS
 const port = process.env.PORT || 3000;
 // Connect to port chosen by Render
 app.listen(port, function() {
  console.log("App started on port: " + port);
 });
-
-
-
-
-
-/** 
-app.use(function (req, res) {
-    console.log("Hello World");
-    res.end("Hello world2");
-});*/
-
-
-
-
-
-
-/**
-// Create an Express application
-//const app = express();
-// Default port
-const PORT = 3000;
-
-// Route to fetch all lessons
-app.get('/lessons', async (request, response) => {
-    try {
-        const db = client.db('Coursework2'); // Access the database
-        const usersCollection = db.collection('userdatabase'); // Access the users collection
-
-        // Fetch all users from the database
-        const allUsers = await usersCollection.find().toArray();
-
-        // Return the list of users as a response
-        response.status(200).json(allUsers);
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        response.status(500).json({ message: 'Server error' });
-    }
-});
-*/
