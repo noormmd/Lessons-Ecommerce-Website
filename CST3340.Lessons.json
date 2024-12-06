@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c02"
+  },
+  "id": 1001,
+  "subject": "Geography",
+  "location": "Oxford",
+  "price": 100,
+  "description": "Lessons located at the highly esteemed educational institute",
+  "availability": 5,
+  "image": "/lessons-website/images/geography.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c03"
+  },
+  "id": 1002,
+  "subject": "English Language",
+  "location": "London",
+  "price": 100,
+  "description": "Lessons aimed at improving English language skills",
+  "availability": 5,
+  "image": "/lessons-website/images/english.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c04"
+  },
+  "id": 1003,
+  "subject": "Maths",
+  "location": "Cambridge",
+  "price": 100,
+  "description": "Working on developing mathematical ability at Cambridge",
+  "availability": 5,
+  "image": "/lessons-website/images/maths.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c05"
+  },
+  "id": 1004,
+  "subject": "History",
+  "location": "Edinburgh",
+  "price": 180,
+  "description": "In-depth lessons on historical events",
+  "availability": 5,
+  "image": "/lessons-website/public/images/history.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c06"
+  },
+  "id": 1005,
+  "subject": "Physics",
+  "location": "Manchester",
+  "price": 110,
+  "description": "Focused lessons on physics concepts and experiments",
+  "availability": 5,
+  "image": "/lessons-website/images/physics.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c07"
+  },
+  "id": 1006,
+  "subject": "Biology",
+  "location": "Bristol",
+  "price": 95,
+  "description": "Lessons designed to improve understanding of biological systems",
+  "availability": 5,
+  "image": "/lessons-website/images/biology.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c08"
+  },
+  "id": 1007,
+  "subject": "Chemistry",
+  "location": "Leeds",
+  "price": 105,
+  "description": "Lessons focusing on chemical reactions and principles",
+  "availability": 5,
+  "image": "/lessons-website/images/chemistry.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c09"
+  },
+  "id": 1008,
+  "subject": "Art",
+  "location": "Brighton",
+  "price": 80,
+  "description": "Creative art lessons to explore techniques and art styles",
+  "availability": 5,
+  "image": "/lessons-website/images/art.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c0a"
+  },
+  "id": 1009,
+  "subject": "Music",
+  "location": "Liverpool",
+  "price": 120,
+  "description": "Music lessons designed to enhance skills and theory",
+  "availability": 5,
+  "image": "/lessons-website/images/music.png"
+},
+{
+  "_id": {
+    "$oid": "6734d8774e4c9d7b8c792c0b"
+  },
+  "id": 1010,
+  "subject": "Economics",
+  "location": "Birmingham",
+  "price": 110,
+  "description": "Lessons to improve economic understanding and application in Birmingham",
+  "availability": 5,
+  "image": "/lessons-website/images/economics.png"
+}]

@@ -188,8 +188,40 @@ async function connectToDB() {
     }
   });
   
-// Attempt at search functionality
+
   app.get('/search', async (req, res) => {
+    const searchQuery = req.query.query || '';  // Get the search query from the URL parameter
+    
+    if (!searchQuery) {
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+  
+    try {
+      await client.connect();
+     
+      // Find lessons matching the query in multiple fields
+      const searchResults = await lessonsCollection.find({
+        $or: [
+          { subject: { $regex: searchQuery, $options: 'i' } },
+          { location: { $regex: searchQuery, $options: 'i' } },
+          { price: { $regex: searchQuery, $options: 'i' } },
+          { availability: { $regex: searchQuery, $options: 'i' } }
+        ]
+      }).toArray();
+  
+      // Return the search results as a JSON response
+      res.json(searchResults);
+    } catch (err) {
+      res.status(500).json({ message: 'Error searching lessons', error: err.message });
+    } finally {
+      await client.close();
+    }
+  });
+  
+
+
+// Attempt at search functionality
+  app.get('ex2/search', async (req, res) => {
     const searchQuery = req.query.query;
   
     try {

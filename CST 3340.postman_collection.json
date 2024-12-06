@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "9a439fde-c319-484a-a612-2f15e6d45859",
+		"name": "CST 3340",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32995420"
+	},
+	"item": [
+		{
+			"name": "Retrieve all lessons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{render_url}}/lessons",
+					"host": [
+						"{{render_url}}"
+					],
+					"path": [
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all order details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{render_url}}/orders",
+					"host": [
+						"{{render_url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Welcome message",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{render_url}}",
+					"host": [
+						"{{render_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post order details",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstname\": \"John\",\r\n  \"surname\": \"Doe\",\r\n  \"phonenumber\": \"1234567890\",\r\n  \"email\": \"john.doe@example.com\",\r\n  \"postcode\": \"12345\",\r\n  \"address\": \"123 Main St\",\r\n  \"lessonIDs\": [\"64aedd123abc456de7890fgh\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{render_url}}/orders",
+					"host": [
+						"{{render_url}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve static images from public",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{render_url}}/images/geography.png",
+					"host": [
+						"{{render_url}}"
+					],
+					"path": [
+						"images",
+						"geography.png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Updating Lesson Availability",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"availability\": 4\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{render_url}}/lessons/6734d8774e4c9d7b8c792c02",
+					"host": [
+						"{{render_url}}"
+					],
+					"path": [
+						"lessons",
+						"6734d8774e4c9d7b8c792c02"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search within mongodb lessons and description",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{render_url}}/search?query=Geography",
+					"host": [
+						"{{render_url}}"
+					],
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "Geography"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
