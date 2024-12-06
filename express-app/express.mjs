@@ -267,25 +267,25 @@ async function connectToDB() {
 // PUT route for /lessons/:id
 app.put('/lessons/:id', async (req, res) => {
   const { id } = req.params;
-  const { increment } = req.body; // Increment variable to adjust availability
+  const { increment } = req.body; // Expect +1 or -1
 
   try {
-    const updatedLesson = await Lesson.findByIdAndUpdate(
+    const result = await Lesson.findByIdAndUpdate(
       id,
-      { $inc: { availability: increment } }, // Using mongoDB increment operator
+      { $inc: { availability: increment } },
       { new: true }
     );
 
-    if (!updatedLesson) {
-      return res.status(404).json({ error: 'Lesson not found' });
+    if (!result) {
+      return res.status(404).send({ error: 'Lesson not found' });
     }
 
-    res.json(updatedLesson);
+    res.status(200).send(result);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to update lesson availability' });
+    res.status(500).send({ error: 'Failed to update lesson availability' });
   }
 });
+
 
 
 /** 
