@@ -203,6 +203,18 @@ async function connectToDB() {
     }
   });
   
+  app.put('/test/:id', function(req, res, next) {
+     req.collection.updateOne({_id: new ObjectId(req.params.id)},
+     {$set: req.body},
+     {safe: true, multi: false}, function(err, result) {
+     if (err) {
+     return next(err);
+     } else {
+     res.send((result.matchedCount === 1) ? {msg: "success"} : {msg: "error"});
+     }
+     }
+     );
+    });
 
   // Updating lesson availability at /lessons/:id
   app.put('/lessons/:id', async (req, res) => {
