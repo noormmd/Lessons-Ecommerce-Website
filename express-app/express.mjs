@@ -249,7 +249,7 @@ async function connectToDB() {
   });
   
 
-  app.get('/api/lessons/search', async (req, res) => {
+  app.get('/search', async (req, res) => {
     const searchQuery = req.query.query;
   
     try {
