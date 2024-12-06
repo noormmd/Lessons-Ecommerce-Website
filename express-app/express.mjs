@@ -249,35 +249,20 @@ async function connectToDB() {
   });
   
 
-  const router = express.Router();
-
-// Search Route to search lessons by query
-app.get('/search', async (req, res) => {
-  try {
-    const query = req.query.q;  // Search query from request URL
-
-    if (!query) {
-      return res.status(400).json({ error: 'Search query is required' });
+  app.get('/api/lessons/search', async (req, res) => {
+    const searchQuery = req.query.query;
+  
+    try {
+      const lessons = await Lesson.find({
+        name: { $regex: searchQuery, $options: 'i' }, // Case-insensitive search
+      }).exec();
+  
+      res.json(lessons);
+    } catch (err) {
+      res.status(500).json({ message: 'Error searching lessons', error: err });
     }
-
-    // Using MongoDB text search
-    const results = await lessonsCollection.find({
-      $text: { $search: query }  // Perform text search using the query
-    }).toArray();
-
-    if (results.length === 0) {
-      return res.status(404).json({ message: 'No lessons found' });
-    }
-
-    res.status(200).json(results);
-  } catch (error) {
-    console.error('Error during search:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-await lessonsCollection.createIndex({ title: "text", description: "text" });
-
+  });
+  
 
 /** 
 //newest
