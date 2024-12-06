@@ -236,12 +236,12 @@ async function connectToDB() {
     const order = req.body;
   
     try {
-      // Insert order into MongoDB
+      // Insert order into MongoDB and send with id
       const result = await ordersCollection.insertOne(order);
       console.log('Order inserted:', result.insertedId);
   
       // Send success response
-      res.status(201).json({ message: 'Order placed successfully', orderId: result.insertedId });
+      res.status(201).json({ message: 'You have placed your order', orderId: result.insertedId });
     } catch (error) {
       console.error('Error inserting order:', error);
       res.status(500).json({ message: 'Error placing order' });
@@ -264,31 +264,32 @@ async function connectToDB() {
   });
   
 
-
-// Update lesson availability (PUT)
+// PUT route for /lessons/:id
 app.put('/lessons/:id', async (req, res) => {
-  const { id } = req.params; // Lesson ID
-  const { available } = req.body; // New availability value
+  const { id } = req.params;
+  const { increment } = req.body; // Increment variable to adjust availability
 
   try {
-    const result = await db.collection('lessons').updateOne(
-      { _id: new ObjectId(id) }, // Match lesson by ID
-      { $set: { available } } // Update the "available" field
+    const updatedLesson = await Lesson.findByIdAndUpdate(
+      id,
+      { $inc: { availability: increment } }, // Using mongoDB increment operator
+      { new: true }
     );
 
-    if (result.matchedCount === 0) {
+    if (!updatedLesson) {
       return res.status(404).json({ error: 'Lesson not found' });
     }
 
-    res.json({ message: 'Lesson updated successfully' });
+    res.json(updatedLesson);
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Failed to update lesson availability' });
   }
 });
 
 
 /** 
-//newest
+//worked - newest
 // POST Route to Save a New Order
 app.post('/orders', async (req, res) => {
     try {
