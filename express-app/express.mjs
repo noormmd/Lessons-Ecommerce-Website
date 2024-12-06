@@ -264,6 +264,29 @@ async function connectToDB() {
   });
   
 
+
+// Update lesson availability (PUT)
+app.put('/lessons/:id', async (req, res) => {
+  const { id } = req.params; // Lesson ID
+  const { available } = req.body; // New availability value
+
+  try {
+    const result = await db.collection('lessons').updateOne(
+      { _id: new ObjectId(id) }, // Match lesson by ID
+      { $set: { available } } // Update the "available" field
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Lesson not found' });
+    }
+
+    res.json({ message: 'Lesson updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update lesson availability' });
+  }
+});
+
+
 /** 
 //newest
 // POST Route to Save a New Order
