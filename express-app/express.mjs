@@ -188,7 +188,7 @@ async function connectToDB() {
     }
   });
   
-
+/**
   app.get('/search', async (req, res) => {
     const searchQuery = req.query.query || '';  // Get the search query from the URL parameter
     
@@ -234,6 +234,7 @@ async function connectToDB() {
       res.status(500).json({ message: 'Error searching lessons', error: err });
     }
   });
+  */
   
   app.put('/test/:id', function(req, res, next) {
      req.collection.updateOne({_id: new ObjectId(req.params.id)},
