@@ -188,7 +188,7 @@ async function connectToDB() {
     }
   });
   
-
+/** 
   app.get('/search', async (req, res) => {
     const searchQuery = req.query.query || '';  // Get the search query from the URL parameter
     
@@ -217,7 +217,7 @@ async function connectToDB() {
       await client.close();
     }
   });
-  
+  */
 /**
 
 // Attempt at search functionality
