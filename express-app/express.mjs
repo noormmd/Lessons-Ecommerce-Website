@@ -188,6 +188,37 @@ async function connectToDB() {
     }
   });
   
+  app.get('/search', async (req, res) => {
+    // Get the search query from the request URL
+    const searchQuery = req.query.query || ''; // Default to an empty string
+
+    // Validate that a search query is provided
+    if (!searchQuery.trim()) {
+        return res.status(400).json({ message: 'Search query is required' });
+    }
+
+    try {
+        // Define the MongoDB query with case-insensitive search for specific fields
+        const searchResults = await lessonsCollection.find({
+            $or: [
+                { subject: { $regex: searchQuery, $options: 'i' } }, // Search in "subject"
+                { location: { $regex: searchQuery, $options: 'i' } } // Search in "location"
+                // Numeric fields like "price" and "availability" are excluded from regex matching
+            ]
+        }).toArray();
+
+        // Log the query and the results for debugging
+        console.log('Search query:', searchQuery);
+        console.log('Search results:', searchResults);
+
+        // Return the search results as a JSON array
+        res.json(searchResults);
+    } catch (err) {
+        console.error('Error during search:', err.message);
+        res.status(500).json({ message: 'Error searching lessons', error: err.message });
+    }
+});
+
 /** 
   app.get('/search', async (req, res) => {
     const searchQuery = req.query.query || '';  // Get the search query from the URL parameter
