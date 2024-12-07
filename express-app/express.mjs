@@ -51,7 +51,6 @@ console.log(Lessons, Orders);
 
 // FUNCTION FOR STATIC IMAGES
 // To serve static files from the public directory
-// Serves images from the public/images folder at /images route
 
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 // Path relative to the root of the repository and public folder
@@ -188,21 +187,22 @@ async function connectToDB() {
     }
   });
   
+  // Search attempt
   app.get('/search', async (req, res) => {
     // Get the search query from the request URL
     const searchQuery = req.query.query || ''; // Default to an empty string
 
     // Validate that a search query is provided
     if (!searchQuery.trim()) {
-        return res.status(400).json({ message: 'Search query is required' });
+        return res.status(400).json({ message: 'Must enter a search query' });
     }
 
     try {
         // Define the MongoDB query with case-insensitive search for specific fields
         const searchResults = await lessonsCollection.find({
             $or: [
-                { subject: { $regex: searchQuery, $options: 'i' } }, // Search in "subject"
-                { location: { $regex: searchQuery, $options: 'i' } } // Search in "location"
+                { subject: { $regex: searchQuery, $options: 'i' } }, // To search in subject
+                { location: { $regex: searchQuery, $options: 'i' } } // To search in location
                 // Numeric fields like "price" and "availability" are excluded from regex matching
             ]
         }).toArray();
@@ -218,54 +218,6 @@ async function connectToDB() {
         res.status(500).json({ message: 'Error searching lessons', error: err.message });
     }
 });
-
-/** 
-  app.get('/search', async (req, res) => {
-    const searchQuery = req.query.query || '';  // Get the search query from the URL parameter
-    
-    if (!searchQuery) {
-      return res.status(400).json({ message: 'Search query is required' });
-    }
-  
-    try {
-      await client.connect();
-     
-      // Find lessons matching the query in multiple fields
-      const searchResults = await lessonsCollection.find({
-        $or: [
-          { subject: { $regex: searchQuery, $options: 'i' } },
-          { location: { $regex: searchQuery, $options: 'i' } },
-          { price: { $regex: searchQuery, $options: 'i' } },
-          { availability: { $regex: searchQuery, $options: 'i' } }
-        ]
-      }).toArray();
-  
-      // Return the search results as a JSON response
-      res.json(searchResults);
-    } catch (err) {
-      res.status(500).json({ message: 'Error searching lessons', error: err.message });
-    } finally {
-      await client.close();
-    }
-  });
-  */
-/**
-
-// Attempt at search functionality
-  app.get('ex2/search', async (req, res) => {
-    const searchQuery = req.query.query;
-  
-    try {
-      const lessons = await Lesson.find({
-        name: { $regex: searchQuery, $options: 'i' }, // Case-insensitive search
-      }).exec();
-  
-      res.json(lessons);
-    } catch (err) {
-      res.status(500).json({ message: 'Error searching lessons', error: err });
-    }
-  });
-  */
   
   app.put('/test/:id', function(req, res, next) {
      req.collection.updateOne({_id: new ObjectId(req.params.id)},
@@ -292,7 +244,7 @@ async function connectToDB() {
     try {
       const updatedLesson = await lessonsCollection.findByIdAndUpdate(
         lessonId,
-        { [attribute]: value }, // Dynamically update the attribute
+        { [attribute]: value }, // Update the attribute
         { new: true } // Return the updated document
       );
   
