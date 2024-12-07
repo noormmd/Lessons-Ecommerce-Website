@@ -232,6 +232,7 @@ async function connectToDB() {
      );
     });
 
+    /**
   // Updating lesson availability at /lessons/:id
   app.put('/lessons/:id', async (req, res) => {
     const lessonId = req.params.id;
@@ -257,7 +258,7 @@ async function connectToDB() {
       console.error('Error updating lesson:', error);
       res.status(500).json({ error: 'Server error' });
     }
-  });
+  });*/
 
 // MW to manage incorrectly typed / unknown routes (fallback)
 app.use("/", function (req, res) {
