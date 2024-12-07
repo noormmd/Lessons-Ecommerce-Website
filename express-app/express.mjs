@@ -188,7 +188,7 @@ async function connectToDB() {
     }
   });
   
-/**
+
   app.get('/search', async (req, res) => {
     const searchQuery = req.query.query || '';  // Get the search query from the URL parameter
     
@@ -218,7 +218,7 @@ async function connectToDB() {
     }
   });
   
-
+/**
 
 // Attempt at search functionality
   app.get('ex2/search', async (req, res) => {
